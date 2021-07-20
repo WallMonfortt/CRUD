@@ -21,8 +21,7 @@ const TodoContainer = () => {
     };
 
   const onDeleteTask = (id) => {
-    const deleteFunc = async () => {
-      const response = await deleteTask(id);
+    const deleteFunc = async () => { await deleteTask(id);
       setTasks((prevState) => prevState.filter((value) => value.id !== id))
     };
 
