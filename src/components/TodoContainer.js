@@ -9,6 +9,9 @@ import TodoItem from "./TodoItem";
 const TodoContainer = () => {
   const [tasks, setTasks] = useState([]);
   const { register, handleSubmit, reset } = useForm();
+  const [modal, setModal] = useState()
+  const [backgroundColor, setBackgroundColor] = useState(null);
+  const style = {backgroundColor}
     
 
     const onSubmitTask = (values) => {
@@ -48,7 +51,7 @@ const TodoContainer = () => {
 
     const upTask = async () => {
       const response = await updateTask(newTask);
-      setTasks((prevState) => [response, ...prevState.filter((value) => value.id !== id)]);
+      setTasks((prevState) => [ response, ...prevState.filter((value) => value.id !== id)]);
       const readFunc = async () => {
         const data = await read();
         setTasks(data.todos);
@@ -80,17 +83,40 @@ const TodoContainer = () => {
     />
   ));
 
+  const pending = tasks.filter(value => value.isCompleted === false);
+  const done = tasks.filter(value => value.isCompleted === true);
+  
+
+  useEffect(() => {
+    if (pending.length === 0) {
+      setModal("Congratulations!!! you've finished your tasks!!")
+      setBackgroundColor("#90be6d")
+    }else{
+      setModal("")
+      setBackgroundColor("")
+      
+    }
+  }, [pending])
+
 
   return (
     <div>
+
       <CreateTodo handleSubmit={handleSubmit}
       register={register}
       handleCreateTask={onSubmitTask} />
+
+      <div className="text-cong" style={style}>{modal}</div>
+
+      <div className="tasks-counter">
+        <h2>Pending tasks: <span className="count p">{pending.length}</span> </h2>
+        <h2>Done tasks: <span className="count d">{done.length}</span></h2>
+      </div>
     
       <Container>
         <Table>
           <thead>
-            <tr>
+            <tr className="tableHeader">
               <th>Task</th>
               <th>Owner</th>
               <th>Status</th>
@@ -104,7 +130,6 @@ const TodoContainer = () => {
           
         </Table>
       </Container>
-
     </div>
   );
 };

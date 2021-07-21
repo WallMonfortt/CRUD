@@ -6,6 +6,9 @@ import nocompleted from '../img/noCompleted.png'
 
 const TodoItem = ({id, task, student, isCompleted, handleDelete, handleUpdate}) => {
   const [icon, setIcon] = useState(nocompleted);
+  const [backgroundColor, setBackgroundColor] = useState();
+  const [textDecoration, setTextDecoration] = useState();
+  const style = {backgroundColor, textDecoration }
 
   function check() {
     document.getElementById("checkBox").checked = true
@@ -18,9 +21,13 @@ const TodoItem = ({id, task, student, isCompleted, handleDelete, handleUpdate}) 
   useEffect(() => {
     if (isCompleted === true) {
       setIcon(completed)
+      setBackgroundColor("#b5e48c");
+      setTextDecoration("line-through")
       check();
     }else{
       setIcon(nocompleted)
+      setBackgroundColor("#e9c46a");
+      setTextDecoration("none")
       uncheck();
     }
   }, [isCompleted])
@@ -29,10 +36,10 @@ const TodoItem = ({id, task, student, isCompleted, handleDelete, handleUpdate}) 
 
 
   return (
-    <tr>
-      <td>{task}</td>
-      <td>{student}</td>
-      <td><img src={icon} width="20px" alt={icon} /><span>{isCompleted}</span></td>
+    <tr style={style}>
+      <td className="tableCont">{task}</td>
+      <td className="tableCont">{student}</td>
+      <td><img src={icon} width="30px" alt={icon} /><span>{isCompleted}</span></td>
       <td><input type="checkbox" id="checkBox" onChange={ () => {
         handleUpdate(id,task,student, isCompleted)
       }}/></td>
